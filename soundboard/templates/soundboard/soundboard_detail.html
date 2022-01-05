@@ -1,0 +1,37 @@
+{% extends 'soundboard/base.html' %}
+
+{% block title %}
+    <title>{{ object }} | Soundboard.didnot.win</title>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h3 class="headerTitle">{{ object }} Soundboard</h3>
+        {% for sound in object.sounds.all %}
+            <button class="btn btn-primary btn-lg soundButton" id="sound_{{ forloop.counter0 }}">{{ sound.name }}</button>
+        {% endfor %}
+    </div>
+
+    <script>
+        var sounds = [
+            {% for sound in object.sounds.all %}
+                new Audio("{{ sound.sound.url }}"),
+            {% endfor %}
+        ]
+        document.addEventListener("DOMContentLoaded", function (event) {
+            attachSounds()
+        });
+
+        function attachSounds() {
+            var buttons = document.getElementsByClassName("soundButton")
+            Array.prototype.forEach.call(buttons, function (button) {
+                var buttonID = button.id.split("_")[1]
+                button.addEventListener("click", function () {
+                    sounds[buttonID].play()
+                })
+            })
+        }
+    </script>
+
+{% endblock %}
