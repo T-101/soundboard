@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'debug_toolbar',
+    'django_simple_plausible',
     # Our apps
     'soundboard'
 ]
@@ -154,3 +155,6 @@ MEDIA_ROOT = env('MEDIA_ROOT')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PLAUSIBLE_SITES = env("PLAUSIBLE_SITES")
+PLAUSIBLE_SCRIPT_URL = env("PLAUSIBLE_SCRIPT_URL")
