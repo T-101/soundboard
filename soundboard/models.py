@@ -27,6 +27,10 @@ def sound_directory_path(instance, orig_filename):
 
 
 class Sound(models.Model):
+
+    class Meta:
+        ordering = ["sort_order"]
+
     soundboard = models.ForeignKey(Soundboard, on_delete=models.CASCADE, related_name="sounds")
     name = models.CharField(max_length=255)
     sound = models.FileField(max_length=255, upload_to=sound_directory_path)
