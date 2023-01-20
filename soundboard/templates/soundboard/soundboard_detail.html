@@ -8,16 +8,14 @@
 
     <div class="container">
         <h3 class="headerTitle">{{ object }} Soundboard</h3>
-        <div class="form-check mb-4">
-            <input class="form-check-input" type="checkbox" value="" id="loopCheckBox" autocomplete="off">
-            <label class="form-check-label" for="flexCheckDefault">
-                Loop
-            </label>
+        <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Loop</label>
         </div>
 
         {% for sound in object.sounds.all %}
             <button class="btn btn-primary btn-lg soundButton mb-2" id="sound_{{ forloop.counter0 }}">
-                <i class="fa-solid fa-play mr-2" style="width: 20px"></i>{{ sound.name }}</button>
+                <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</button>
         {% endfor %}
     </div>
 
