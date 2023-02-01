@@ -14,7 +14,7 @@
         </div>
 
         {% for sound in object.sounds.all %}
-            <button class="btn btn-primary btn-lg soundButton mb-2" id="sound_{{ forloop.counter0 }}">
+            <button class="btn btn-primary btn-lg soundButton mb-2" data-sound-src="{{ sound.sound.url }}">
                 <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</button>
         {% endfor %}
     </div>
@@ -22,43 +22,29 @@
     <audio id="audio_player"></audio>
 
     <script>
-        const sounds = [
-            {% for sound in object.sounds.all %}
-                "{{ sound.sound.url }}",
-            {% endfor %}
-        ]
-
         const audioPlayer = document.querySelector("#audio_player")
+        const loopCheckBox = document.querySelector("#loopCheckBox")
+        const soundButtons = document.querySelectorAll(".soundButton")
 
         clearIcons = () => {
-            document.querySelectorAll(".soundButton").forEach((elem) => {
-                elem.firstElementChild.classList.replace("fa-pause", "fa-play")
-            })
+            soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
         }
 
-        document.addEventListener("DOMContentLoaded", function (event) {
-            $(".soundButton").click((e) => {
-                const target = e.target.tagName === "I" ? e.target.parentElement : e.target
-                if (target.firstElementChild.classList.contains("fa-pause")) {
-                    audioPlayer.pause()
-                    target.firstElementChild.classList.replace("fa-pause", "fa-play")
-                    return
-                }
-                clearIcons()
-                const soundId = target.id.split("_")[1]
-                target.firstElementChild.classList.replace("fa-play", "fa-pause")
-                audioPlayer.src = sounds[soundId]
-                audioPlayer.play()
-            })
+        soundButtons.forEach(button => button.addEventListener("click", (e) => {
+            const target = e.target.tagName === "I" ? e.target.parentElement : e.target
+            if (target.firstElementChild.classList.contains("fa-pause")) {
+                audioPlayer.pause()
+                return target.firstElementChild.classList.replace("fa-pause", "fa-play")
+            }
+            clearIcons()
+            target.firstElementChild.classList.replace("fa-play", "fa-pause")
+            audioPlayer.src = target.dataset.soundSrc
+            audioPlayer.play()
+        }))
 
-            $("#loopCheckBox").click((e) => {
-                audioPlayer.loop = e.target.checked
-            })
+        loopCheckBox.addEventListener("click", e => audioPlayer.loop = e.target.checked)
 
-            audioPlayer.addEventListener('ended', (event) => {
-                clearIcons()
-            })
-        });
+        audioPlayer.addEventListener('ended', clearIcons)
 
     </script>
 
