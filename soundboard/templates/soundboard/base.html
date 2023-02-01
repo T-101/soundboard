@@ -18,25 +18,18 @@
 </head>
 <body>
 
-<!-- As a heading -->
-<nav class="navbar navbar-dark bg-primary" style="margin-bottom: 2em;">
+<nav class="navbar navbar-dark bg-primary mb-4">
     <div class="container-fluid">
         <a href="{% url 'soundboard:list' %}">
-            <span class="navbar-brand mb-0 h1">Soundboard Did Not Win</span>
+            <span class="navbar-brand mb-0 h1">
+                <img src="{% static 'soundboard/favicon.ico' %}" alt="" style="height: 1.4em"/>
+                Soundboard Did Not Win</span>
         </a>
     </div>
 </nav>
 
 {% block content %}
 {% endblock %}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
-        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/js/bootstrap.min.js"
-        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% plausible %}
 
