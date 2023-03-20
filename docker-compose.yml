@@ -5,10 +5,10 @@ services:
     env_file:
       - .env
     build: .
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:${CONTAINER_PORT}"
-    container_name: soundboard
-    restart: unless-stopped
+    # command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:${CONTAINER_PORT}"
+    # command: bash -c "gunicorn config.wsgi -w ${UWSGI_WORKERS -b 0.0.0.0:${CONTAINER_PORT}"
+    restart: always
     volumes:
       - .:/app
     ports:
-      - "${CONTAINER_PORT}:${CONTAINER_PORT}"
+      - "127.0.0.1:${CONTAINER_PORT}:${CONTAINER_PORT}"
