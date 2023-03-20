@@ -22,9 +22,10 @@
     <audio id="audio_player"></audio>
 
     <script>
-        const audioPlayer = document.querySelector("#audio_player")
-        const loopCheckBox = document.querySelector("#loopCheckBox")
-        const soundButtons = document.querySelectorAll(".soundButton")
+        const
+            audioPlayer = document.querySelector("#audio_player"),
+            loopCheckBox = document.querySelector("#loopCheckBox"),
+            soundButtons = document.querySelectorAll(".soundButton")
 
         clearIcons = () => {
             soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
