@@ -1,14 +1,20 @@
 <!DOCTYPE html>{% load static %}{% load plausible %}
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     {% block title %}
-        <title>Soundboard.didnot.win</title>
+        <title>Soundboard</title>
+        <meta property="og:title" content="Soundboard"/>
     {% endblock %}
+    <meta property="og:description" content="Yet Another Soundboard"/>
+    <meta property="og:url" content="https://soundboard.didnot.win"/>
     <link rel="icon" type="image/x-icon" href="{% static 'soundboard/favicon.ico' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
-          integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+
+    <script src="{% static 'soundboard/bs-color-mode-toggler.js' %}"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css"
+          integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
           integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -18,18 +24,45 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-primary mb-4">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
     <div class="container-fluid">
-        <a href="{% url 'soundboard:list' %}">
+        <a class="text-decoration-none" href="{% url 'soundboard:list' %}">
             <span class="navbar-brand mb-0 h1">
                 <img src="{% static 'soundboard/favicon.ico' %}" alt="" style="height: 1.4em"/>
                 Soundboard Did Not Win</span>
         </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-2">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false"><i class="fas fa-sun"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <button class="dropdown-item" data-bs-theme-value="light">
+                            <i class="fas fa-sun me-2"></i>Light Mode
+                        </button>
+                        <button class="dropdown-item" data-bs-theme-value="dark">
+                            <i class="fas fa-moon me-2"></i>Dark Mode
+                        </button>
+                        <button class="dropdown-item" data-bs-theme-value="auto">
+                            <i class="fas fa-magic me-2"></i>Automatic
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
 {% block content %}
 {% endblock %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+        integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% plausible %}
 
