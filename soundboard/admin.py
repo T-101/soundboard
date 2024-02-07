@@ -13,7 +13,7 @@ class SoundInline(TabularInline):
 class SoundboardAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'slug')
     search_fields = ('name', 'slug')
-    prepopulated_fields = {'slug': ['name']}
+    readonly_fields = ['slug']
     inlines = [SoundInline]
 
 
@@ -30,3 +30,4 @@ class SoundAdmin(admin.ModelAdmin):
     list_filter = ('soundboard',)
     search_fields = ('name',)
     autocomplete_fields = ['soundboard']
+    readonly_fields = ['slug']
