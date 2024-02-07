@@ -16,9 +16,10 @@
         </div>
 
         {% for sound in object.sounds.all %}
-            <button class="btn btn-primary btn-lg soundButton mb-2" data-sound-slug="{{ sound.slug }}"
-                    data-sound-src="{{ sound.sound.url }}">
-                <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</button>
+            <a class="btn btn-primary btn-lg soundButton mb-2"
+               href="{% url 'soundboard:detail' object.slug sound.slug %}" onclick="return false"
+               data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
+                <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</a>
         {% endfor %}
     </div>
 
@@ -37,8 +38,9 @@
         const selectedSound = window.location.hash.split("#").pop()
 
         soundButtons.forEach(button => {
-            console.log(button)
-            if (button.dataset.soundSlug === selectedSound || button.dataset.soundSlug === "{{ sound }}") {button.classList.add("soundButtonSelected")}
+            if (button.dataset.soundSlug === selectedSound || button.dataset.soundSlug === "{{ sound }}") {
+                button.classList.add("soundButtonSelected")
+            }
         })
 
         soundButtons.forEach(button => button.addEventListener("click", (e) => {
