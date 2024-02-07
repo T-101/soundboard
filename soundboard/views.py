@@ -11,7 +11,12 @@ class SoundboardListView(generic.ListView):
 
 class SoundboardDetailView(generic.DetailView):
     model = Soundboard
-    slug_field = "slug"
 
-    def get_queryset(self):
-        return self.model.objects.prefetch_related("sounds").all()
+    def get_object(self, queryset=None):
+        return Soundboard.objects.get(slug=self.kwargs["soundboard"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if "sound" in self.kwargs:
+            context["sound"] = self.kwargs.get("sound")
+        return context

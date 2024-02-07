@@ -11,12 +11,13 @@
         <h3 class="mb-4">{{ object }} Soundboard</h3>
         <div class="form-check form-switch mb-4">
             <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox"
-            style="scale: 2; margin: 10px 25px 0 -25px;">
+                   style="scale: 2; margin: 10px 25px 0 -25px;">
             <label class="form-check-label" for="loopCheckBox" style="font-size: 20px;">Loop</label>
         </div>
 
         {% for sound in object.sounds.all %}
-            <button class="btn btn-primary btn-lg soundButton mb-2" data-sound-src="{{ sound.sound.url }}">
+            <button class="btn btn-primary btn-lg soundButton mb-2" data-sound-slug="{{ sound.slug }}"
+                    data-sound-src="{{ sound.sound.url }}">
                 <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</button>
         {% endfor %}
     </div>
@@ -32,6 +33,13 @@
         clearIcons = () => {
             soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
         }
+
+        const selectedSound = window.location.hash.split("#").pop()
+
+        soundButtons.forEach(button => {
+            console.log(button)
+            if (button.dataset.soundSlug === selectedSound || button.dataset.soundSlug === "{{ sound }}") {button.classList.add("soundButtonSelected")}
+        })
 
         soundButtons.forEach(button => button.addEventListener("click", (e) => {
             const target = e.target.tagName === "I" ? e.target.parentElement : e.target
