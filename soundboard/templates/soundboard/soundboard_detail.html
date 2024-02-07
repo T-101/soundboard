@@ -17,7 +17,7 @@
 
         {% for sound in object.sounds.all %}
             <a class="btn btn-primary btn-lg soundButton mb-2"
-               href="{% url 'soundboard:detail' object.slug sound.slug %}" onclick="return false"
+               href="{% url 'soundboard:detail' object.slug sound.slug %}"
                data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
                 <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</a>
         {% endfor %}
@@ -44,6 +44,7 @@
         })
 
         soundButtons.forEach(button => button.addEventListener("click", (e) => {
+            e.preventDefault()
             const target = e.target.tagName === "I" ? e.target.parentElement : e.target
             if (target.firstElementChild.classList.contains("fa-pause")) {
                 audioPlayer.pause()
