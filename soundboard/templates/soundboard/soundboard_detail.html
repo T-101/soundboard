@@ -67,9 +67,9 @@
             audioPlayer = document.querySelector("#audio_player"),
             loopCheckBox = document.querySelector("#loopCheckBox"),
             imageCheckBox = document.querySelector("#imageCheckBox"),
-            imageCollapse = document.querySelector("#imageCollapse"),
+            collapseElementList = document.querySelectorAll('#imageCollapse'),
             soundButtons = document.querySelectorAll(".soundButton")
-        let collapse
+        let collapseList = Array()
 
         clearIcons = () => {
             soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
@@ -98,9 +98,9 @@
 
         imageCheckBox.addEventListener("click", e => {
             if (e.target.checked) {
-                collapse.show()
+                collapseList.forEach(e => e.show())
             } else {
-                collapse.hide()
+                collapseList.forEach(e => e.hide())
             }
         })
 
@@ -109,7 +109,7 @@
         audioPlayer.addEventListener('ended', clearIcons)
 
         document.addEventListener("DOMContentLoaded", () => {
-            collapse = new bootstrap.Collapse(imageCollapse, {toggle: false})
+            collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, {toggle: false}))
         });
 
     </script>
