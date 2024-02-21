@@ -26,7 +26,7 @@ class Sound(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from="name", blank=True, null=True, overwrite=True, max_length=255)
     sound = models.FileField(max_length=255, upload_to=sound_directory_path)
-    image = models.ImageField(max_length=255, blank=True, null=True)
+    image = models.ImageField(max_length=255, blank=True, null=True, upload_to=sound_directory_path)
     sort_order = models.IntegerField(default=0)
 
     class Meta:
@@ -38,15 +38,15 @@ class Sound(models.Model):
 
 
 @receiver(signals.pre_delete, sender=Sound)
-def delete_sound_attachments(sender, instance, **kwargs):
+def delete_attachments(sender, instance, **kwargs):
     try:
         if instance.sound:
             instance.sound.delete()
     except FileNotFoundError:
         pass
     try:
-        if instance.sound:
-            instance.image.delete()
+        if instance.image:
+            instance.image.delete(save=True)
     except FileNotFoundError:
         pass
     try:
@@ -54,3 +54,20 @@ def delete_sound_attachments(sender, instance, **kwargs):
         os.rmdir(directory)
     except (OSError, FileNotFoundError):
         pass
+
+
+@receiver(signals.pre_save, sender=Sound)
+def delete_image_file_on_clear(sender, instance, **kwargs):
+    if not instance.pk:
+        return False
+    try:
+        old_file = sender.objects.get(pk=instance.pk).image
+    except sender.DoesNotExist:
+        return False
+    new_file = instance.image
+    if not old_file == new_file:
+        try:
+            if os.path.isfile(old_file.path):
+                os.remove(old_file.path)
+        except ValueError:
+            pass

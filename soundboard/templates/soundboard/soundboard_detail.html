@@ -7,20 +7,57 @@
 
 {% block content %}
 
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+        {#justify-content: center; /* Optional: Align cards to the center horizontally */#}
+        }
+
+        .card {
+            flex: 0 0 auto; /* Ensure cards don't grow to fill space */
+        }
+
+    </style>
+
     <div class="container">
         <h3 class="mb-4">{{ object }} Soundboard</h3>
-        <div class="form-check form-switch mb-4">
-            <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox"
-                   style="scale: 2; margin: 10px 25px 0 -25px;">
-            <label class="form-check-label" for="loopCheckBox" style="font-size: 20px;">Loop</label>
+        <div class="card-container">
+            <div class="form-check form-switch mb-4 me-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox"
+                       style="scale: 2; margin: 10px 25px 0 -25px;">
+                <label class="form-check-label" for="loopCheckBox" style="font-size: 20px;">Loop</label>
+            </div>
+
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="imageCheckBox"
+                       style="scale: 2; margin: 10px 25px 0 -25px;">
+                <label class="form-check-label" for="imageCheckBox" style="font-size: 20px;">Images</label>
+            </div>
         </div>
 
-        {% for sound in object.sounds.all %}
-            <a class="btn btn-primary btn-lg soundButton mb-2"
-               href="{% url 'soundboard:detail' object.slug sound.slug %}"
-               data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
-                <i class="fa-solid fa-play me-2" style="width: 20px"></i>{{ sound.name }}</a>
-        {% endfor %}
+        <div class="card-container">
+            {% for sound in object.sounds.all %}
+                <div class="card text-center m-1" style="width: 10rem;">
+                    {% if sound.image %}
+                        <div class="collapse" id="imageCollapse">
+                            <img src="{{ sound.image.url }}" class="card-img-top p-1" alt="..."
+                                 style="border-radius: 5%;">
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ sound.name }}</h5>
+
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary btn-lg soundButton mb-2"
+                           href="{% url 'soundboard:detail' object.slug sound.slug %}"
+                           data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
+                            <i class="fa-solid fa-play fa-lg mx-2" style="width: 20px"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
     <audio id="audio_player"></audio>
@@ -29,7 +66,10 @@
         const
             audioPlayer = document.querySelector("#audio_player"),
             loopCheckBox = document.querySelector("#loopCheckBox"),
+            imageCheckBox = document.querySelector("#imageCheckBox"),
+            imageCollapse = document.querySelector("#imageCollapse"),
             soundButtons = document.querySelectorAll(".soundButton")
+        let collapse
 
         clearIcons = () => {
             soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
@@ -56,9 +96,21 @@
             audioPlayer.play()
         }))
 
+        imageCheckBox.addEventListener("click", e => {
+            if (e.target.checked) {
+                collapse.show()
+            } else {
+                collapse.hide()
+            }
+        })
+
         loopCheckBox.addEventListener("click", e => audioPlayer.loop = e.target.checked)
 
         audioPlayer.addEventListener('ended', clearIcons)
+
+        document.addEventListener("DOMContentLoaded", () => {
+            collapse = new bootstrap.Collapse(imageCollapse, {toggle: false})
+        });
 
     </script>
 
