@@ -8,7 +8,11 @@
     {% endblock %}
     <meta property="og:description" content="Yet Another Soundboard"/>
     <meta property="og:url" content="https://soundboard.didnot.win"/>
-    <link rel="icon" type="image/x-icon" href="{% static 'soundboard/favicon.ico' %}">
+    <meta property="og:image" content="https://soundboard.didnot.win/static/soundboard/speaker192.webp"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'soundboard/speaker32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'soundboard/speaker16.png' %}">
+    <link rel="manifest" href="{% static 'soundboard/site.webmanifest' %}">
+    <!-- Favicon from https://www.flaticon.com/free-icon/sound_2838546 -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="{% static 'soundboard/bs-color-mode-toggler.js' %}"></script>
@@ -29,7 +33,7 @@
     <div class="container-fluid">
         <a class="text-decoration-none" href="{% url 'soundboard:list' %}">
             <span class="navbar-brand mb-0 h1">
-                <img src="{% static 'soundboard/favicon.ico' %}" alt="" style="height: 1.4em"/>
+                <img src="{% static 'soundboard/speaker32.png' %}" alt="Speaker icon" style="height: 2em" class="me-2"/>
                 Soundboard Did Not Win</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
