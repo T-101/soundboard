@@ -1,11 +1,13 @@
-*.pyc
-.idea/*
-.vscode/*
+.idea/
+.vscode/
 .env
 db.sqlite3
-docker-compose.override.yml
 
-media/*
-static/*
+*.pyc
+
+media/
+./static/
+
+docker-compose.override.yml
 
 .DS_Store
