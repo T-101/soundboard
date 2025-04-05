@@ -3,12 +3,12 @@
   "short_name": "Soundboard",
   "icons": [
     {
-      "src": "/static/soundboard/speaker192.webp",
+      "src": "/static/soundboard/soundboard_icon_v2_192.webp",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/static/soundboard/speaker512.webp",
+      "src": "/static/soundboard/soundboard_icon_v2_512.webp",
       "sizes": "512x512",
       "type": "image/png"
     }
