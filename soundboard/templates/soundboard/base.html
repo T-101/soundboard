@@ -1,4 +1,4 @@
-<!DOCTYPE html>{% load static %}{% load plausible %}
+<!DOCTYPE html>{% load static plausible %}
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -8,11 +8,11 @@
     {% endblock %}
     <meta property="og:description" content="Yet Another Soundboard"/>
     <meta property="og:url" content="https://soundboard.didnot.win"/>
-    <meta property="og:image" content="https://soundboard.didnot.win/static/soundboard/speaker192.webp"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'soundboard/speaker32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'soundboard/speaker16.png' %}">
+    <meta property="og:image" content="https://soundboard.didnot.win/static/soundboard/soundboard_icon_v2_192.webp"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'soundboard/soundboard_icon_v2_180.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'soundboard/soundboard_icon_v2_32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'soundboard/soundboard_icon_v2_16.png' %}">
     <link rel="manifest" href="{% static 'soundboard/site.webmanifest' %}">
-    <!-- Favicon from https://www.flaticon.com/free-icon/sound_2838546 -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="{% static 'soundboard/bs-color-mode-toggler.js' %}"></script>
@@ -32,8 +32,8 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
     <div class="container-fluid">
         <a class="text-decoration-none" href="{% url 'soundboard:list' %}">
-            <span class="navbar-brand mb-0 h1">
-                <img src="{% static 'soundboard/speaker32.png' %}" alt="Speaker icon" style="height: 2em" class="me-2"/>
+            <span class="navbar-brand mb-0">
+                <img src="{% static 'soundboard/soundboard_icon_v2_192.webp' %}" alt="Speaker icon" style="height: 2rem" class="me-2"/>
                 Soundboard Did Not Win</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
