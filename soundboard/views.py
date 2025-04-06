@@ -11,9 +11,7 @@ class SoundboardListView(generic.ListView):
 
 class SoundboardDetailView(generic.DetailView):
     model = Soundboard
-
-    def get_object(self, queryset=None):
-        return Soundboard.objects.get(slug=self.kwargs["soundboard"])
+    slug_url_kwarg = "soundboard"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
