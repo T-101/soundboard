@@ -20,9 +20,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('soundboard.urls'))
+    path(settings.UNTRACKED_PATH, include('soundboard.urls', namespace="untracked")),
+    path('', include('soundboard.urls', namespace="normal"))
 ]
-
 
 if settings.DEBUG:
     import debug_toolbar

@@ -33,7 +33,8 @@
     <div class="container-fluid">
         <a class="text-decoration-none" href="{% url 'soundboard:list' %}">
             <span class="navbar-brand mb-0">
-                <img src="{% static 'soundboard/soundboard_icon_v2_192.webp' %}" alt="Speaker icon" style="height: 2rem" class="me-2"/>
+                <img src="{% static 'soundboard/soundboard_icon_v2_192.webp' %}"
+                     alt="Speaker icon" style="height: 2rem" class="me-2"/>
                 Soundboard Did Not Win</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -69,7 +70,9 @@
         integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-{% plausible %}
+{% if request.resolver_match.namespace == "normal" %}
+    {% plausible %}
+{% endif %}
 
 </body>
 </html>
