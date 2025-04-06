@@ -154,7 +154,7 @@ MEDIA_ROOT = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-UNTRACKED_PATH = env.str('UNTRACKED_PATH')
+UNTRACKED_PATH = env.str('UNTRACKED_PATH', "")
 
 PLAUSIBLE_SITES = env("PLAUSIBLE_SITES", default=None)
 PLAUSIBLE_SCRIPT_URL = env("PLAUSIBLE_SCRIPT_URL", default=None)
