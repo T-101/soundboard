@@ -75,13 +75,15 @@
             soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
         }
 
-        const selectedSound = window.location.hash.split("#").pop()
-
-        soundButtons.forEach(button => {
-            if (button.dataset.soundSlug === selectedSound || button.dataset.soundSlug === "{{ sound }}") {
-                button.classList.add("soundButtonSelected")
-            }
-        })
+        {% if sound %}
+            document.querySelectorAll(".card").forEach(card => {
+                const slug = card.querySelector(".soundButton")?.dataset.soundSlug
+                card.style.opacity = (slug === "{{ sound }}") ? "1" : "0.4"
+            })
+            soundButtons.forEach(button => {
+                if (button.dataset.soundSlug === "{{ sound }}") button.classList.add("soundButtonSelected")
+            })
+        {% endif %}
 
         soundButtons.forEach(button => button.addEventListener("click", (e) => {
             e.preventDefault()
