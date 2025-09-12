@@ -10,7 +10,39 @@
     }
 }
 
+.soundButton {
+    width: 4em;
+}
+
 .soundButtonSelected {
     animation: pulsate 2s infinite;
     outline: none;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; /* Optional: Align cards to the center horizontally */
+}
+
+.card {
+    flex: 0 0 auto; /* Ensure cards don't grow to fill space */
+    width: 10em;
+}
+
+.card-img-top {
+    border-radius: 5%;
+}
+
+.form-check-input {
+    scale: 2;
+    margin: 10px 25px 0 -25px;
+}
+
+.form-check-label {
+    font-size: 20px;
+}
+
+.fa-solid.fa-play {
+    width: 20px;
 }
