@@ -5,44 +5,68 @@
     <meta property="og:title" content="{{ object }} | Soundboard"/>
 {% endblock %}
 
+{% block extrahead %}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const audioPlayer = document.querySelector("#audio_player"),
+                collapseElementList = document.querySelectorAll('#imageCollapse'),
+                soundButtons = document.querySelectorAll(".soundButton"),
+                collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, {toggle: false})),
+                clearIcons = () => {
+                    soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
+                }
+
+            {% if sound %}
+                document.querySelectorAll(".card").forEach(card => {
+                    const slug = card.querySelector(".soundButton")?.dataset.soundSlug
+                    card.style.opacity = (slug === "{{ sound }}") ? "1" : "0.4"
+                })
+                soundButtons.forEach(button => {
+                    if (button.dataset.soundSlug === "{{ sound }}") button.classList.add("soundButtonSelected")
+                })
+            {% endif %}
+
+            soundButtons.forEach(button => button.addEventListener("click", (e) => {
+                e.preventDefault()
+                const target = e.target.tagName === "I" ? e.target.parentElement : e.target
+                if (target.firstElementChild.classList.contains("fa-pause")) {
+                    audioPlayer.pause()
+                    return target.firstElementChild.classList.replace("fa-pause", "fa-play")
+                }
+                clearIcons()
+                target.firstElementChild.classList.replace("fa-play", "fa-pause")
+                audioPlayer.src = target.dataset.soundSrc
+                audioPlayer.play()
+            }))
+
+            document.querySelector("#imageCheckBox").addEventListener("click", () => collapseList.forEach(e => e.toggle()))
+            document.querySelector("#loopCheckBox").addEventListener("click", e => audioPlayer.loop = e.target.checked)
+            audioPlayer.addEventListener('ended', clearIcons)
+        })
+    </script>
+{% endblock %}
+
 {% block content %}
-
-    <style>
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-        {#justify-content: center; /* Optional: Align cards to the center horizontally */#}
-        }
-
-        .card {
-            flex: 0 0 auto; /* Ensure cards don't grow to fill space */
-        }
-
-    </style>
-
     <div class="container">
         <h3 class="mb-4">{{ object }} Soundboard</h3>
         <div class="card-container">
             <div class="form-check form-switch mb-4 me-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox"
-                       style="scale: 2; margin: 10px 25px 0 -25px;">
-                <label class="form-check-label" for="loopCheckBox" style="font-size: 20px;">Loop</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox" autocomplete="off">
+                <label class="form-check-label me-4" for="loopCheckBox">Loop</label>
             </div>
 
-            <div class="form-check form-switch mb-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="imageCheckBox"
-                       style="scale: 2; margin: 10px 25px 0 -25px;">
-                <label class="form-check-label" for="imageCheckBox" style="font-size: 20px;">Images</label>
+            <div class="form-check form-switch mb-4 me-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="imageCheckBox" autocomplete="off">
+                <label class="form-check-label me-4" for="imageCheckBox">Images</label>
             </div>
         </div>
 
         <div class="card-container">
             {% for sound in object.sounds.all %}
-                <div class="card text-center m-1" style="width: 10rem;">
+                <div class="card text-center m-1">
                     {% if sound.image %}
                         <div class="collapse" id="imageCollapse">
-                            <img src="{{ sound.image.url }}" class="card-img-top p-1" alt="..."
-                                 style="border-radius: 5%;">
+                            <img src="{{ sound.image.url }}" class="card-img-top p-1" alt="...">
                         </div>
                     {% endif %}
                     <div class="card-body">
@@ -53,7 +77,7 @@
                         <a class="btn btn-primary btn-lg soundButton mb-2"
                            href="{% url 'soundboard:detail' object.slug sound.slug %}"
                            data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
-                            <i class="fa-solid fa-play fa-lg mx-2" style="width: 20px"></i></a>
+                            <i class="fa-solid fa-play fa-lg mx-2"></i></a>
                     </div>
                 </div>
             {% endfor %}
@@ -61,59 +85,5 @@
     </div>
 
     <audio id="audio_player"></audio>
-
-    <script>
-        const
-            audioPlayer = document.querySelector("#audio_player"),
-            loopCheckBox = document.querySelector("#loopCheckBox"),
-            imageCheckBox = document.querySelector("#imageCheckBox"),
-            collapseElementList = document.querySelectorAll('#imageCollapse'),
-            soundButtons = document.querySelectorAll(".soundButton")
-        let collapseList = Array()
-
-        clearIcons = () => {
-            soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
-        }
-
-        {% if sound %}
-            document.querySelectorAll(".card").forEach(card => {
-                const slug = card.querySelector(".soundButton")?.dataset.soundSlug
-                card.style.opacity = (slug === "{{ sound }}") ? "1" : "0.4"
-            })
-            soundButtons.forEach(button => {
-                if (button.dataset.soundSlug === "{{ sound }}") button.classList.add("soundButtonSelected")
-            })
-        {% endif %}
-
-        soundButtons.forEach(button => button.addEventListener("click", (e) => {
-            e.preventDefault()
-            const target = e.target.tagName === "I" ? e.target.parentElement : e.target
-            if (target.firstElementChild.classList.contains("fa-pause")) {
-                audioPlayer.pause()
-                return target.firstElementChild.classList.replace("fa-pause", "fa-play")
-            }
-            clearIcons()
-            target.firstElementChild.classList.replace("fa-play", "fa-pause")
-            audioPlayer.src = target.dataset.soundSrc
-            audioPlayer.play()
-        }))
-
-        imageCheckBox.addEventListener("click", e => {
-            if (e.target.checked) {
-                collapseList.forEach(e => e.show())
-            } else {
-                collapseList.forEach(e => e.hide())
-            }
-        })
-
-        loopCheckBox.addEventListener("click", e => audioPlayer.loop = e.target.checked)
-
-        audioPlayer.addEventListener('ended', clearIcons)
-
-        document.addEventListener("DOMContentLoaded", () => {
-            collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, {toggle: false}))
-        });
-
-    </script>
 
 {% endblock %}
