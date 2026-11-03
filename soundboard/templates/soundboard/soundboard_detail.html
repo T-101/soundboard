@@ -1,4 +1,5 @@
 {% extends 'soundboard/base.html' %}
+{% load static %}
 
 {% block title %}
     <title>{{ object }} | Soundboard</title>
@@ -6,50 +7,17 @@
 {% endblock %}
 
 {% block extrahead %}
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const audioPlayer = document.querySelector("#audio_player"),
-                collapseElementList = document.querySelectorAll('#imageCollapse'),
-                soundButtons = document.querySelectorAll(".soundButton"),
-                collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, {toggle: false})),
-                clearIcons = () => {
-                    soundButtons.forEach(button => button.firstElementChild.classList.replace("fa-pause", "fa-play"))
-                }
-
-            {% if sound %}
-                document.querySelectorAll(".card").forEach(card => {
-                    const slug = card.querySelector(".soundButton")?.dataset.soundSlug
-                    card.style.opacity = (slug === "{{ sound }}") ? "1" : "0.4"
-                })
-                soundButtons.forEach(button => {
-                    if (button.dataset.soundSlug === "{{ sound }}") button.classList.add("soundButtonSelected")
-                })
-            {% endif %}
-
-            soundButtons.forEach(button => button.addEventListener("click", (e) => {
-                e.preventDefault()
-                const target = e.target.tagName === "I" ? e.target.parentElement : e.target
-                if (target.firstElementChild.classList.contains("fa-pause")) {
-                    audioPlayer.pause()
-                    return target.firstElementChild.classList.replace("fa-pause", "fa-play")
-                }
-                clearIcons()
-                target.firstElementChild.classList.replace("fa-play", "fa-pause")
-                audioPlayer.src = target.dataset.soundSrc
-                audioPlayer.play()
-            }))
-
-            document.querySelector("#imageCheckBox").addEventListener("click", () => collapseList.forEach(e => e.toggle()))
-            document.querySelector("#loopCheckBox").addEventListener("click", e => audioPlayer.loop = e.target.checked)
-            audioPlayer.addEventListener('ended', clearIcons)
-        })
-    </script>
+    <script src="{% static 'soundboard/player.js' %}?v=2" defer></script>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h3 class="mb-4">{{ object }} Soundboard</h3>
-        <div class="card-container">
+    <div class="container sound-desk" data-selected-sound="{{ sound|default:'' }}">
+        <header class="desk-heading">
+            <a class="back-link v1-only" href="{% url 'soundboard:list' %}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All soundboards</a>
+            <p class="eyebrow v1-only">READY WHEN YOU ARE</p>
+            <h1 class="h3 mb-4">{{ object }} Soundboard</h1>
+        </header>
+        <div class="card-container desk-controls">
             <div class="form-check form-switch mb-4 me-4">
                 <input class="form-check-input" type="checkbox" role="switch" id="loopCheckBox" autocomplete="off">
                 <label class="form-check-label me-4" for="loopCheckBox">Loop</label>
@@ -61,12 +29,12 @@
             </div>
         </div>
 
-        <div class="card-container mb-4">
+        <div class="card-container sound-grid mb-4">
             {% for sound in object.sounds.all %}
-                <div class="card text-center m-1">
+                <div class="card sound-card text-center m-1">
                     {% if sound.image %}
-                        <div class="collapse" id="imageCollapse">
-                            <img src="{{ sound.image.url }}" class="card-img-top p-1" alt="...">
+                        <div class="collapse sound-image">
+                            <img src="{{ sound.image.url }}" class="card-img-top p-1" alt="{{ sound.name }}">
                         </div>
                     {% endif %}
                     <div class="card-body">
@@ -74,14 +42,18 @@
 
                     </div>
                     <div class="card-footer">
-                        <a class="btn btn-primary btn-lg soundButton mb-2"
+                        <a class="btn btn-primary btn-lg soundButton mb-2" role="button"
                            href="{% url 'soundboard:detail' object.slug sound.slug %}"
+                           aria-label="Play {{ sound.name }}" aria-pressed="false" data-sound-name="{{ sound.name }}"
                            data-sound-slug="{{ sound.slug }}" data-sound-src="{{ sound.sound.url }}">
-                            <i class="fa-solid fa-play fa-lg mx-2"></i></a>
+                            <i class="fa-solid fa-play fa-lg mx-2" aria-hidden="true"></i></a>
                     </div>
                 </div>
+            {% empty %}
+                <p class="text-body-secondary">This board is waiting for its first sound.</p>
             {% endfor %}
         </div>
+        <p id="player-status" class="visually-hidden" role="status" aria-live="polite"></p>
     </div>
 
     <audio id="audio_player"></audio>

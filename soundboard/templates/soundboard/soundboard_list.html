@@ -2,10 +2,19 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container board-library">
+        <header class="library-heading v1-only">
+            <p class="eyebrow">YOUR PERSONAL SOUND DESK</p>
+            <h1>Good sounds. One tap away.</h1>
+            <p class="text-body-secondary">Pick a board, find your sound, and press play.</p>
+        </header>
+        <div class="board-list">
         {% for object in object_list %}
-            <h3><a href="{{ object.slug }}">{{ object }}</a></h3>
+            <h3 class="board-entry"><a href="{% url 'soundboard:detail' object.slug %}"><span class="board-symbol v1-only" aria-hidden="true"><i class="fa-solid fa-sliders"></i></span><span>{{ object }}</span><i class="fa-solid fa-arrow-right v1-only" aria-hidden="true"></i></a></h3>
+        {% empty %}
+            <p class="text-body-secondary">No soundboards yet. Add a board and some sounds in the admin to get started.</p>
         {% endfor %}
+        </div>
     </div>
 
 {% endblock %}

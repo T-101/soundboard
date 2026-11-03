@@ -1,62 +1,66 @@
-/*!
- * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Licensed under the Creative Commons Attribution 3.0 Unported License.
- */
-
 (() => {
     'use strict'
 
-    const storedTheme = localStorage.getItem('theme')
-
-    const getPreferredTheme = () => {
-        if (storedTheme) {
-            return storedTheme
-        }
-
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const root = document.documentElement
+    const systemMode = window.matchMedia('(prefers-color-scheme: dark)')
+    const modes = ['light', 'dark', 'auto']
+    const themes = ['v0', 'v1']
+    const read = key => {
+        try { return localStorage.getItem(key) } catch { return null }
     }
-
-    const setTheme = function (theme) {
-        if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-bs-theme', 'dark')
-        } else {
-            document.documentElement.setAttribute('data-bs-theme', theme)
-        }
+    const write = (key, value) => {
+        try { localStorage.setItem(key, value) } catch { /* Storage may be disabled. */ }
     }
+    const valid = (value, choices, fallback) => choices.includes(value) ? value : fallback
+    // Preserve the existing color preference under its original storage key.
+    let mode = valid(read('theme'), modes, 'auto')
+    let theme = valid(read('soundboard-theme'), themes, 'v0')
 
-    setTheme(getPreferredTheme())
-
-    const showActiveTheme = theme => {
-        const activeThemeIcon = document.querySelector('.theme-icon-active use')
-        const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
-        // const svgOfActiveBtn = btnToActive.querySelector('svg use').getAttribute('href')
-
-        document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
-            element.classList.remove('active')
+    const render = () => {
+        root.dataset.bsTheme = mode === 'auto' ? (systemMode.matches ? 'dark' : 'light') : mode
+        root.dataset.soundboardTheme = theme
+        const toggle = document.querySelector('#color-mode-toggle')
+        if (toggle) {
+            const next = modes[(modes.indexOf(mode) + 1) % modes.length]
+            const label = `Color mode: ${mode}. Switch to ${next} mode`
+            toggle.setAttribute('aria-label', label)
+            toggle.title = label
+            toggle.querySelectorAll('[data-mode-icon]').forEach(icon => {
+                icon.toggleAttribute('hidden', icon.dataset.modeIcon !== mode)
+            })
+        }
+        document.querySelectorAll('[data-site-theme]').forEach(button => {
+            const active = button.dataset.siteTheme === theme
+            button.classList.toggle('active', active)
+            button.setAttribute('aria-pressed', String(active))
         })
-
-        btnToActive.classList.add('active')
-        // activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+        const label = document.querySelector('#site-theme-label')
+        if (label) label.textContent = `Soundboard ${theme}`
     }
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (storedTheme !== 'light' || storedTheme !== 'dark') {
-            setTheme(getPreferredTheme())
+    // Apply preferences before styles and page content load.
+    render()
+    systemMode.addEventListener('change', render)
+    window.addEventListener('storage', event => {
+        if (event.key === 'theme' || event.key === 'soundboard-theme' || event.key === null) {
+            mode = valid(read('theme'), modes, 'auto')
+            theme = valid(read('soundboard-theme'), themes, 'v0')
+            render()
         }
     })
-
-    window.addEventListener('DOMContentLoaded', () => {
-        showActiveTheme(getPreferredTheme())
-
-        document.querySelectorAll('[data-bs-theme-value]')
-            .forEach(toggle => {
-                toggle.addEventListener('click', () => {
-                    const theme = toggle.getAttribute('data-bs-theme-value')
-                    localStorage.setItem('theme', theme)
-                    setTheme(theme)
-                    showActiveTheme(theme)
-                })
+    document.addEventListener('DOMContentLoaded', () => {
+        render()
+        document.querySelector('#color-mode-toggle').addEventListener('click', () => {
+            mode = modes[(modes.indexOf(mode) + 1) % modes.length]
+            write('theme', mode)
+            render()
+        })
+        document.querySelectorAll('[data-site-theme]').forEach(button => {
+            button.addEventListener('click', () => {
+                theme = button.dataset.siteTheme
+                write('soundboard-theme', theme)
+                render()
             })
+        })
     })
 })()

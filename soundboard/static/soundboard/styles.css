@@ -12,6 +12,35 @@
 
 .soundButton {
     width: 4em;
+    position: relative;
+}
+
+.soundButton::before,
+.soundButton::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    height: 3px;
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.soundButton::before {
+    background: rgb(255 255 255 / 25%);
+}
+
+.soundButton::after {
+    background: #fff;
+    transform: scaleX(var(--sound-progress, 0));
+    transform-origin: left;
+}
+
+.soundButton.is-playing::before,
+.soundButton.is-playing::after {
+    opacity: 1;
 }
 
 .soundButtonSelected {
@@ -45,4 +74,131 @@
 
 .fa-solid.fa-play {
     width: 20px;
+}
+
+/* Shared navigation: keep both preferences within reach on small screens. */
+.site-navbar > .container-fluid { gap: .75rem 1rem; }
+.brand-link { min-width: 0; }
+.navbar-brand { white-space: normal; display: flex; align-items: center; }
+.navbar-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; }
+.navbar-control { min-height: 44px; color: #fff; border: 1px solid #ffffff65; }
+.navbar-control:hover, .navbar-control:focus-visible, .navbar-control.show {
+    color: #fff; background: #ffffff20; border-color: #fff;
+}
+.navbar-control:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+.color-mode-toggle { width: 44px; display: grid; place-items: center; padding: .5rem; }
+.color-mode-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.color-mode-toggle [hidden] { display: none; }
+.v1-only { display: none !important; }
+.sound-card-muted { opacity: .4; }
+.soundButton:focus-visible { outline: 3px solid var(--bs-body-color); outline-offset: 5px; }
+.soundButton.is-playing { filter: brightness(.85); }
+
+/* Soundboard v1: a tactile sound desk, with a separate palette for each mode. */
+[data-soundboard-theme="v1"] {
+    --desk-bg: #edf0eb;
+    --desk-panel: #fafbf7;
+    --desk-ink: #20382f;
+    --desk-muted: #5c6d62;
+    --desk-line: #cbd3c8;
+    --desk-accent: #246549;
+    --desk-pad-top: #449a71;
+    --desk-pad-bottom: #246549;
+    --desk-pad-edge: #164831;
+    --desk-shadow: #273e2b1a;
+    --bs-body-color: var(--desk-ink);
+    --bs-body-color-rgb: 32, 56, 47;
+    --bs-secondary-color: var(--desk-muted);
+    --bs-body-bg: var(--desk-bg);
+    --bs-border-color: var(--desk-line);
+    --bs-primary-rgb: 36, 101, 73;
+}
+[data-soundboard-theme="v1"][data-bs-theme="dark"] {
+    --desk-bg: #151e1b;
+    --desk-panel: #202d27;
+    --desk-ink: #e8efe5;
+    --desk-muted: #abbcad;
+    --desk-line: #3d5043;
+    --desk-accent: #a6dfb7;
+    --desk-pad-top: #478f68;
+    --desk-pad-bottom: #285d43;
+    --desk-pad-edge: #0d291d;
+    --desk-shadow: #00000040;
+    --bs-body-color-rgb: 232, 239, 229;
+    --bs-primary-rgb: 40, 93, 67;
+}
+[data-soundboard-theme="v1"] body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 1px 1px, var(--desk-line) .65px, transparent .8px) 0 0 / 18px 18px, var(--desk-bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+[data-soundboard-theme="v1"] .v1-only { display: block !important; }
+[data-soundboard-theme="v1"] .site-navbar {
+    background: var(--desk-panel) !important;
+    border-bottom: 1px solid var(--desk-line);
+    padding: 1rem 0;
+    margin-bottom: 0 !important;
+}
+[data-soundboard-theme="v1"] .site-navbar > .container-fluid { max-width: 1320px; padding-inline: 1.5rem; }
+[data-soundboard-theme="v1"] .navbar-brand { color: var(--desk-ink); font-weight: 750; letter-spacing: -.04em; }
+[data-soundboard-theme="v1"] .navbar-control { color: var(--desk-ink); border-color: var(--desk-line); background: var(--desk-bg); border-radius: .75rem; }
+[data-soundboard-theme="v1"] .navbar-control:hover,
+[data-soundboard-theme="v1"] .navbar-control:focus-visible,
+[data-soundboard-theme="v1"] .navbar-control.show { background: var(--desk-panel); border-color: var(--desk-accent); }
+[data-soundboard-theme="v1"] .dropdown-menu { --bs-dropdown-bg: var(--desk-panel); --bs-dropdown-link-active-bg: var(--desk-pad-bottom); border-radius: .8rem; padding: .5rem; box-shadow: 0 8px 24px var(--desk-shadow); }
+[data-soundboard-theme="v1"] .dropdown-item { border-radius: .4rem; padding-block: .65rem; }
+[data-soundboard-theme="v1"] .board-library,
+[data-soundboard-theme="v1"] .sound-desk { padding-block: 3rem; }
+[data-soundboard-theme="v1"] .eyebrow { font-size: .7rem; font-weight: 750; letter-spacing: .18em; color: var(--desk-accent); margin-bottom: .8rem; }
+[data-soundboard-theme="v1"] .library-heading h1,
+[data-soundboard-theme="v1"] .desk-heading h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.045em; overflow-wrap: anywhere; }
+[data-soundboard-theme="v1"] .library-heading { margin-bottom: 2.5rem; }
+[data-soundboard-theme="v1"] .board-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
+[data-soundboard-theme="v1"] .board-entry { margin: 0; min-width: 0; font-size: 1.15rem; }
+[data-soundboard-theme="v1"] .board-entry a { display: flex; gap: 1rem; align-items: center; height: 100%; color: var(--desk-ink); background: var(--desk-panel); padding: 1.5rem; text-decoration: none; border: 1px solid var(--desk-line); border-radius: 1rem; box-shadow: 0 4px 0 var(--desk-line); transition: transform .15s; }
+[data-soundboard-theme="v1"] .board-entry a:hover { transform: translateY(-3px); border-color: var(--desk-accent); }
+[data-soundboard-theme="v1"] .board-entry a > span:nth-child(2) { overflow-wrap: anywhere; }
+[data-soundboard-theme="v1"] .board-entry .board-symbol { color: var(--desk-accent); }
+[data-soundboard-theme="v1"] .board-entry .fa-arrow-right { margin-left: auto; font-size: .9rem; }
+[data-soundboard-theme="v1"] .back-link { color: var(--desk-muted); width: fit-content; font-size: .85rem; text-decoration: none; margin-bottom: 2rem; }
+[data-soundboard-theme="v1"] .back-link:hover { color: var(--desk-accent); text-decoration: underline; }
+[data-soundboard-theme="v1"] .desk-controls { gap: 1.5rem; padding: 1rem 1.5rem; margin: 0 0 1.5rem; border: 1px solid var(--desk-line); border-radius: .8rem; background: var(--desk-panel); }
+[data-soundboard-theme="v1"] .desk-controls .form-check { display: flex; align-items: center; gap: .75rem; padding: 0; margin: 0 !important; min-height: 2rem; }
+[data-soundboard-theme="v1"] .form-check-input { float: none; flex-shrink: 0; scale: 1; width: 2.4em; height: 1.35em; margin: 0; cursor: pointer; }
+[data-soundboard-theme="v1"] .form-check-input:checked { background-color: var(--desk-pad-bottom); border-color: var(--desk-pad-top); }
+[data-soundboard-theme="v1"] .form-check-label { font-size: .9rem; margin: 0 !important; cursor: pointer; }
+[data-soundboard-theme="v1"] .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.25rem; }
+[data-soundboard-theme="v1"] .sound-card { position: relative; width: auto; min-width: 0; margin: 0 !important; background: var(--desk-panel); border: 1px solid var(--desk-line); border-radius: 1rem; box-shadow: 0 3px 0 var(--desk-line), 0 8px 20px var(--desk-shadow); overflow: hidden; }
+[data-soundboard-theme="v1"] .sound-card .card-body { display: grid; place-items: center; padding: 1.25rem 1rem .5rem; min-height: 5rem; }
+[data-soundboard-theme="v1"] .sound-card .card-title { font-size: .95rem; font-weight: 650; line-height: 1.4; overflow-wrap: anywhere; margin: 0; }
+[data-soundboard-theme="v1"] .sound-card .card-footer { border: 0; background: transparent; padding: .75rem 1.2rem 1.6rem; }
+[data-soundboard-theme="v1"] .sound-card .card-img-top { max-height: 160px; object-fit: contain; }
+[data-soundboard-theme="v1"] .soundButton {
+    display: inline-grid; place-items: center; width: 100%; height: 5rem; margin: 0 !important;
+    border: 1px solid var(--desk-pad-edge); border-radius: .8rem;
+    color: #fff; background: linear-gradient(155deg, var(--desk-pad-top), var(--desk-pad-bottom));
+    box-shadow: inset 0 2px 0 #ffffff40, inset 0 -2px 0 #00000015, 0 7px 0 var(--desk-pad-edge), 0 10px 10px var(--desk-shadow);
+    transition: transform .1s, box-shadow .1s, filter .1s;
+    touch-action: manipulation;
+}
+[data-soundboard-theme="v1"] .soundButton:hover { filter: brightness(1.1); }
+[data-soundboard-theme="v1"] .soundButton:active,
+[data-soundboard-theme="v1"] .soundButton.is-playing { transform: translateY(5px); filter: brightness(1.12); box-shadow: inset 0 2px 4px #00000035, 0 2px 0 var(--desk-pad-edge), 0 3px 6px var(--desk-shadow); }
+[data-soundboard-theme="v1"] .soundButtonSelected { animation: none; outline: 3px solid var(--desk-accent); outline-offset: 4px; }
+@media (max-width: 575.98px) {
+    .site-navbar > .container-fluid { align-items: flex-start; }
+    .brand-link { flex-basis: 100%; }
+    .navbar-brand { font-size: 1.05rem; margin-right: 0; }
+    .navbar-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
+    [data-soundboard-theme="v1"] .site-navbar > .container-fluid { padding-inline: 1rem; }
+    [data-soundboard-theme="v1"] .board-library,
+    [data-soundboard-theme="v1"] .sound-desk { padding: 1.75rem 1rem; }
+    [data-soundboard-theme="v1"] .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+    [data-soundboard-theme="v1"] .sound-card .card-footer { padding: .75rem .85rem 1.4rem; }
+    [data-soundboard-theme="v1"] .desk-controls { padding: .8rem 1rem; gap: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .soundButtonSelected { animation: none; outline: 3px solid var(--bs-body-color); }
+    [data-soundboard-theme="v1"] .soundButton,
+    [data-soundboard-theme="v1"] .board-entry a { transition: none; }
 }
