@@ -1,5 +1,5 @@
 <!DOCTYPE html>{% load static plausible %}
-<html lang="en" data-bs-theme="light">
+<html lang="en" data-bs-theme="light" data-soundboard-theme="v0">
 <head>
     <meta charset="UTF-8">
     {% block title %}
@@ -23,48 +23,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
           integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" href="{% static 'soundboard/styles.css' %}"/>
+    <link rel="stylesheet" href="{% static 'soundboard/styles.css' %}?v=2"/>
     {% block extrahead %}
     {% endblock %}
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
+<nav class="navbar navbar-dark bg-primary mb-4 site-navbar" aria-label="Main navigation">
     <div class="container-fluid">
-        <a class="text-decoration-none" href="{% url 'soundboard:list' %}">
+        <a class="text-decoration-none brand-link" href="{% url 'soundboard:list' %}">
             <span class="navbar-brand mb-0">
                 <img src="{% static 'soundboard/soundboard_icon_v2_192.webp' %}"
                      alt="Speaker icon" style="height: 2rem" class="me-2"/>
                 Soundboard Did Not Win</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-2">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-sun"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <button class="dropdown-item" data-bs-theme-value="light">
-                            <i class="fa-solid fa-sun me-2"></i>Light Mode
-                        </button>
-                        <button class="dropdown-item" data-bs-theme-value="dark">
-                            <i class="fa-solid fa-moon me-2"></i>Dark Mode
-                        </button>
-                        <button class="dropdown-item" data-bs-theme-value="auto">
-                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Automatic
-                        </button>
-                    </div>
-                </li>
-            </ul>
+        <div class="navbar-actions">
+            <div class="dropdown">
+                <button class="btn navbar-control dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" aria-label="Choose site theme" id="site-theme-toggle">
+                    <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                    <span id="site-theme-label">Soundboard v0</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="site-theme-toggle">
+                    <h6 class="dropdown-header">Site theme</h6>
+                    <button type="button" class="dropdown-item active" data-site-theme="v0" aria-pressed="true">Soundboard v0</button>
+                    <button type="button" class="dropdown-item" data-site-theme="v1" aria-pressed="false">Soundboard v1</button>
+                </div>
+            </div>
+            <button class="btn navbar-control color-mode-toggle" type="button" id="color-mode-toggle"
+                    aria-label="Color mode: auto. Switch to light mode" title="Color mode: auto. Switch to light mode">
+                <svg data-mode-icon="light" hidden viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+                <svg data-mode-icon="dark" hidden viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z"/></svg>
+                <svg data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 8 8 6 6 0 0 1-8-8Z"/><path d="M17 2v2m3 3h2m-3-3 1-1"/></svg>
+            </button>
         </div>
     </div>
 </nav>
 
-{% block content %}
-{% endblock %}
+<main id="main-content">
+    {% block content %}
+    {% endblock %}
+</main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
         integrity="sha512-HvOjJrdwNpDbkGJIG2ZNqDlVqMo77qbs4Me4cah0HoDrfhrbA+8SBlZn1KrvAQw7cILLPFJvdwIgphzQmMm+Pw=="
